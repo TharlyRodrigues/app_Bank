@@ -62,16 +62,20 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 const displayMovements = function (movements) {
-  movements.movements.forEach(function (mov, i) {
+  containerMovements.innerHTML = '';
+  movements.forEach(function (mov, i) {
+    const type = mov > 0 ? 'deposito' : 'saque';
+
     const html = `
         <div class="movements__row">
-          <div class="movements__type movements__type--deposit">${
-            i + 1
-          }deposit</div>
-          <div class="movements__date">3 days ago</div>
+          <div class="movements__type movements__type--${type}">${
+      i + 1
+    } ${type}</div>
+        
           <div class="movements__value">${mov}</div>
         </div>
     `;
+    containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
 
