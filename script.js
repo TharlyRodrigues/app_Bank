@@ -80,3 +80,39 @@ const displayMovements = function (movements) {
 };
 
 displayMovements(account1.movements);
+
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance} EUR`;
+};
+
+calcDisplayBalance(account1.movements);
+
+//função para pega  a primeira letra do nome e colocar em minusculo
+// const user = 'Steven Thomas Williams';
+
+// const createUserNamesEX = function (user) {
+//   const username = user
+//     .toLowerCase()
+//     .split(' ') // separa a string
+//     .map(name => name[0])
+//     .join(''); // junta a string
+//   return username;
+// };
+
+// console.log(createUserNamesEX('tharly rodrigues elizeu'));
+
+const createUserNames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner // criar um novo obj
+      .toLowerCase()
+      .split(' ') // separa a string
+      .map(name => name[0])
+      .join(''); // junta a string
+  });
+};
+
+createUserNames(accounts);
+// console.log(accounts);
+
+/////////////////////////////////////////////////
