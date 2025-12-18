@@ -35,6 +35,8 @@ const account4 = {
 
 const accounts = [account1, account2, account3, account4];
 
+console.log(accounts);
+
 // Elements
 const labelWelcome = document.querySelector('.welcome');
 const labelDate = document.querySelector('.date');
@@ -80,9 +82,10 @@ const displayMovements = function (movements) {
 
 // displayMovements(account1.movements);
 
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} €`;
+const calcDisplayBalance = function (acc) {
+  const balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  acc.balance = balance; /// criando um novo valor no obj acc balance movements
+  labelBalance.textContent = `${acc.balance} €`;
 };
 
 // calcDisplayBalance(account1.movements);
@@ -134,6 +137,16 @@ const createUserNames = function (accs) {
 
 createUserNames(accounts);
 
+const updateUI = acc => {
+  // display movimentações
+  displayMovements(acc.movements);
+  // display balance
+  calcDisplayBalance(acc);
+  //display summary
+  calcDisplaySummary(acc);
+  // console.log(acc.owner);
+};
+
 // console.log(accounts);
 ////////////////////////////////////////////////////////////
 // add o login usuários;
@@ -166,12 +179,37 @@ btnLogin.addEventListener('click', function (e) {
   inputLoginPin.blur();
 
   containerApp.style.opacity = 100;
-  // display movimentações
-  displayMovements(currentAccount.movements);
-  // display balance
-  calcDisplayBalance(currentAccount.movements);
-  //display summary
-  calcDisplaySummary(currentAccount);
 
-  console.log(currentAccount.owner);
+  //update UI
+  updateUI(currentAccount);
+});
+
+/// TRANSFERÊNCIA DE VALORES ENTRE USUÁRIOS
+
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const amount = Number(inputTransferAmount.value);
+
+  //procurar a conta certa dentro do accounts
+  const receiverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+
+  inputTransferAmount.value = inputTransferTo.value = '';
+
+  console.log(amount, receiverAcc);
+  if (
+    amount > 0 &&
+    receiverAcc &&
+    currentAccount.balance >= amount &&
+    receiverAcc?.username !== currentAccount.username
+  ) {
+    currentAccount.movements.push(-amount);
+    receiverAcc.movements.push(amount);
+    // console.log('transferência valida');
+
+    //update UI
+    updateUI(currentAccount);
+  }
 });
